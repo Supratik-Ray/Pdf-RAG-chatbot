@@ -30,6 +30,7 @@ const upload = multer({ storage: storage });
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({ mssg: "All good!" });
@@ -47,8 +48,8 @@ app.post("/upload/pdf", upload.single("pdf"), async (req, res) => {
   res.json({ message: "file uploaded!" });
 });
 
-app.get("/chat", async (req, res) => {
-  const userQuery = "SSG is ideal for what?";
+app.post("/chat", async (req, res) => {
+  const userQuery = req.body.userQuery;
   const embeddings = new GoogleGenerativeAIEmbeddings({
     model: "models/gemini-embedding-001",
   });
